@@ -1,9 +1,9 @@
 # Projecto COVID-19 Região Autónoma da Madeira (RAM)
-Projecto colaborativo e independente de monitorização do COVID-19 na Região Autónoma da Madeira (RAM), inspirado no projecto original de monitorização do COVID-19 em Portugal da [ANMSP] (https://www.anmsp.pt/covid19) e baseado no seu [repositório] (https://github.com/aperaltasantos/covid_pt).   
+Projecto colaborativo e independente de monitorização do COVID-19 na Região Autónoma da Madeira (RAM), inspirado no projecto original de monitorização do COVID-19 em Portugal da [ANMSP](https://www.anmsp.pt/covid19) e baseado no seu [repositório](https://github.com/aperaltasantos/covid_pt).   
 
 # Dashboard COVID-19
-- [Região Autónoma da Madeira] (https://jpmvieira.github.io/covid_ram/)
-- [Portugal] (https://aperaltasantos.github.io/covid_pt/)
+- [Região Autónoma da Madeira](https://jpmvieira.github.io/covid_ram/)
+- [Portugal](https://aperaltasantos.github.io/covid_pt/)
 
 ## Fontes 
 - [IASAÚDE](https://www.covidmadeira.pt)
@@ -25,12 +25,12 @@ Projecto colaborativo e independente de monitorização do COVID-19 na Região A
 
 ## Contactos
 - COVID-19RAM
-- [Email] jpmvieira@gmail.com
+- [Email] (jpmvieira@gmail.com)
 - [Twitter - Facebook - LinkedIn - Instagram] (@jpmvieira)
 
 - COVID-19PT
-- [Email] andre.peralta.santos@gmail.com
-- [Twitter DM] @andre_peralta
+- [Email] (andre.peralta.santos@gmail.com)
+- [Twitter DM] (@andre_peralta)
 
 ## Termos de uso:
 Este repositório do GitHub e seu conteúdo, incluindo todos os dados, mapeamento e análise, direitos autorais são reservados. Os dados fornecidos ao público são estritamente para fins de investigação, e informação ao público. O site baseia-se em dados publicamente disponíveis de várias fontes. Os autores renunciam a toda e qualquer representação e garantia com relação ao site, incluindo precisão, adequação ao uso e comercialização. É estritamente proibido confiar no site para orientação médica.
