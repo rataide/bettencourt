@@ -16,5 +16,5 @@ We only use official Government sources to generate these datasets. Specifically
 - death_new: New (last 24h) deaths with a COVID19 diagnosis
 
 ## Contact
-jpmvieira@gmail.com
-aperalta@uw.edu
+- jpmvieira@gmail.com
+- aperalta@uw.edu
