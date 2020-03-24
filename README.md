@@ -7,6 +7,7 @@ Projecto colaborativo e independente de monitorização do COVID-19 na Região A
 
 ## Fontes 
 - [IASAÚDE](https://www.covidmadeira.pt)
+- [DGS] (http://covid-19.min-saude.pt)
 
 ## Adaptação à Região Autónoma da Madeira
 - João Pedro Vieira
