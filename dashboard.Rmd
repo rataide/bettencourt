@@ -12,7 +12,7 @@ output:
 #    vertical_layout: scroll
     social: [ "twitter", "facebook", "menu" ]
     navbar:
-      - { title: "About", href: "https://github.com/aperaltasantos/covid_pt" }
+      - { title: "About", href: "https://github.com/jpmvieira/covid_ram" }
 ---
 
 <style>                     
@@ -77,18 +77,18 @@ library(here)
 ```{r}
 u <- "https://docs.google.com/spreadsheets/d/e/2PACX-1vRMXLHQCnR8qQZACsatuYflwGUH58okY8k-50-cnDDXLBXB4Jh7PImKXYzwHggYJsN374JeE-SvR0_W/pub?output=csv"
 tc <- getURL(u, ssl.verifypeer=FALSE)
-covid_pt <- read.csv(textConnection(tc))
+covid_ram <- read.csv(textConnection(tc))
 ```
 
 ```{r}
-covid_pt$Data <- as.Date(covid_pt$Data,
+covid_ram$Data <- as.Date(covid_ram$Data,
                          "%d-%m-%Y"
                          )
-covid_pt<-covid_pt  %>%
+covid_ram<-covid_ram  %>%
   mutate(week = week(Data)
   )
              
-covid_pt <- mutate(covid_pt, 
+covid_ram <- mutate(covid_ram, 
                    Suspeitos_lag = lag(x = Suspeitos, 
                                         n = 1, 
                                         order_by = Data),
@@ -134,7 +134,7 @@ covid_pt <- mutate(covid_pt,
 ```
 
 ```{r}
-covid_pt_english <- covid_pt %>%
+covid_ram_english <- covid_ram %>%
   select(
     Data,
 #    AS,
@@ -170,12 +170,12 @@ covid_pt_english <- covid_pt %>%
     death_new="Mortes_var"
   ) 
 write_csv(
-  covid_pt_english,
+  covid_ram_english,
   here::here(
     "datasets", 
      paste(
        format(Sys.time(), "%d_%b_%Y"),
-       "covid_prt.csv")
+       "covid_prt_ram.csv")
   )
 )
           
@@ -183,14 +183,14 @@ write_csv(
 
 
 ```{r}
-covid_pt_l <- covid_pt %>%
+covid_ram_l <- covid_ram %>%
   pivot_longer(
    cols = "Suspeitos":"AS",
    names_to = "tipo",
    values_to = "value",
    values_drop_na = TRUE
  ) 
-covid_pt_last<-covid_pt %>% 
+covid_ram_last<-covid_ram %>% 
   filter(Data==last(Data))
 ```
 
@@ -203,9 +203,9 @@ Row
 
 ### Suspeitos
 ```{r}
-x1 <- covid_pt_last$Suspeitos
-x2<- covid_pt_last$Suspeitos_sign
-x3<- abs(covid_pt_last$Suspeitos_var)
+x1 <- covid_ram_last$Suspeitos
+x2<- covid_ram_last$Suspeitos_sign
+x3<- abs(covid_ram_last$Suspeitos_var)
 valueBox(paste(x1,"(",x2,x3,")"), 
          icon = "fa-exclamation-triangle",
          color="#fdd49e")
@@ -213,9 +213,9 @@ valueBox(paste(x1,"(",x2,x3,")"),
 
 ### Confirmados
 ```{r}
-x1 <- covid_pt_last$Confirmados
-x2<- covid_pt_last$Confirmados_sign
-x3<- abs(covid_pt_last$Confirmados_var)
+x1 <- covid_ram_last$Confirmados
+x2<- covid_ram_last$Confirmados_sign
+x3<- abs(covid_ram_last$Confirmados_var)
 valueBox(paste(x1,"(",x2,x3,")"), 
          icon = "fa-file-medical",
          color="#fdbb84")
@@ -223,9 +223,9 @@ valueBox(paste(x1,"(",x2,x3,")"),
 
 ### Internados
 ```{r}
-x1 <- covid_pt_last$Internados
-x2<- covid_pt_last$Internados_sign
-x3<- abs(covid_pt_last$Internados_var)
+x1 <- covid_ram_last$Internados
+x2<- covid_ram_last$Internados_sign
+x3<- abs(covid_ram_last$Internados_var)
 valueBox(paste(x1,"(",x2,x3,")"), 
          icon = "fa-hospital",
          color="#fc8d59")
@@ -237,9 +237,9 @@ Row
 
 ### Intensivos
 ```{r}
-x1 <- covid_pt_last$Intensivos
-x2<- covid_pt_last$Intensivos_sign
-x3<- abs(covid_pt_last$Intensivos_var)
+x1 <- covid_ram_last$Intensivos
+x2<- covid_ram_last$Intensivos_sign
+x3<- abs(covid_ram_last$Intensivos_var)
 valueBox(paste(x1,"(",x2,x3,")"), 
          icon = "fas fa-procedures",
          color="#ef6548")
@@ -247,19 +247,19 @@ valueBox(paste(x1,"(",x2,x3,")"),
 
 ### Recuperados
 ```{r}
-x1 <- covid_pt_last$Recuperados
-x2<- covid_pt_last$Recuperados_sign
-x3<- abs(covid_pt_last$Recuperados_var)
+x1 <- covid_ram_last$Recuperados
+x2<- covid_ram_last$Recuperados_sign
+x3<- abs(covid_ram_last$Recuperados_var)
 valueBox(paste(x1,"(",x2,x3,")"), 
          icon = "fas fa-walking",
          color="#a1d99b")
 ```
 
-### ??bitos
+### Obitos
 ```{r}
-x1 <- covid_pt_last$Mortes
-x2<- covid_pt_last$Mortes_sign
-x3<- abs(covid_pt_last$Mortes_var)
+x1 <- covid_ram_last$Mortes
+x2<- covid_ram_last$Mortes_sign
+x3<- abs(covid_ram_last$Mortes_var)
 valueBox(paste(x1,"(",x2,x3,")"), 
          icon = "fa-infinity",
          color="#bdbdbd")
@@ -269,12 +269,28 @@ Row {.tabset .tabset-fade}
 -----------------------------------------------------------------------
 
 ```{r}
-covid_pt1<- covid_pt %>%
+covid_ram1<- covid_ram %>%
   filter(
     Data>as.Date("2020-03-01")
   )
 ```
 
+### Suspeitos
+
+```{r}
+highchart() %>% 
+  hc_chart(type = "column") %>% 
+  hc_add_theme(hc_theme_smpl()) %>% 
+  hc_title(text = "Casos suspeitos de COVID-19 na Regiao Autonoma da Madeira") %>% 
+  hc_subtitle(text = "Fonte: IASAUDE & Autores") %>% 
+  hc_xAxis(categories = format(covid_ram$Data, "%b %d")) %>% 
+  hc_yAxis(title = list(text = "Casos suspeitos (cumulativo)")) %>% 
+  hc_add_series(data = covid_ram$Suspeitos,
+                name = "Suspeitos", color = "#fd8d3c") %>% 
+  hc_exporting(
+    enabled = TRUE
+  )
+```
 
 ### Confirmados  
 
@@ -282,11 +298,11 @@ covid_pt1<- covid_pt %>%
 highchart() %>% 
   hc_chart(type = "column") %>% 
   hc_add_theme(hc_theme_smpl()) %>% 
-  hc_title(text = "Casos confirmados de COVID-19 na Regi??o Aut??noma da Madeira") %>% 
-  hc_subtitle(text = "Fonte: IASA??DE & Autores") %>% 
-  hc_xAxis(categories = format(covid_pt1$Data, "%b %d")) %>% 
+  hc_title(text = "Casos confirmados de COVID-19 na Regiao Autonoma da Madeira") %>% 
+  hc_subtitle(text = "Fonte: IASAUDE & Autores") %>% 
+  hc_xAxis(categories = format(covid_ram1$Data, "%b %d")) %>% 
   hc_yAxis(title = list(text = "Casos confirmados (cumulativo)")) %>% 
-  hc_add_series(data = covid_pt1$Confirmados,
+  hc_add_series(data = covid_ram1$Confirmados,
                 name = "Confirmados", color = "#e6550d") %>% 
   hc_exporting(
     enabled = TRUE
@@ -299,62 +315,35 @@ highchart() %>%
 highchart() %>% 
   hc_chart(type = "column" , color = "#e6550d") %>% 
   hc_add_theme(hc_theme_smpl()) %>% 
-  hc_title(text = "Curva epid??mica de COVID-19 na Regi??o Aut??noma da Madeira") %>% 
-  hc_subtitle(text = "Fonte: IASA??DE & Autores") %>% 
-  hc_xAxis(categories = format(covid_pt1$Data, "%b %d")) %>% 
+  hc_title(text = "Curva epidemica de COVID-19 na Regiao Autonoma da Madeira") %>% 
+  hc_subtitle(text = "Fonte: IASAUDE & Autores") %>% 
+  hc_xAxis(categories = format(covid_ram1$Data, "%b %d")) %>% 
   hc_yAxis(title = list(text = "Novos casos confirmados")) %>% 
-  hc_add_series(data = covid_pt1$Confirmados_var,
+  hc_add_series(data = covid_ram$Confirmados_var,
                 name = "Novos casos", color = "#e6550d") %>% 
   hc_exporting(
     enabled = TRUE
   )
 ```
 
-```{r}
-u <- "https://docs.google.com/spreadsheets/d/e/2PACX-1vQJm8oY12efrr4DFOPkc7gscFRc-10_xcEniSU64nF2vwkDJNPF2w0xcitSXezst5LXi3FCn1HCcIqG/pub?gid=1697035743&single=true&output=csv"
-tc <- getURL(u, ssl.verifypeer=FALSE)
-map_pt_cases <- read.csv(textConnection(tc))
-```
-
-
 ### Recuperados
 
 ```{r}
-covid_pt2<- covid_pt %>%
+covid_ram2<- covid_ram %>%
   filter(
     Data>as.Date("2020-03-10")
   )
 highchart() %>% 
   hc_chart(type = "column") %>% 
   hc_add_theme(hc_theme_smpl()) %>% 
-  hc_title(text = "Casos recuperados de COVID-19 na Regi??o Aut??noma da Madeira") %>% 
-  hc_subtitle(text = "Fonte: IASA??DE & Autores") %>% 
-  hc_xAxis(categories = format(covid_pt2$Data, "%b %d")) %>% 
+  hc_title(text = "Casos recuperados de COVID-19 na Regiao Autonoma da Madeira") %>% 
+  hc_subtitle(text = "Fonte: IASAUDE & Autores") %>% 
+  hc_xAxis(categories = format(covid_ram2$Data, "%b %d")) %>% 
   hc_yAxis(title = list(text = "Casos recuperados (cumulativo)")) %>% 
-  hc_add_series(data = covid_pt2$Recuperados,
+  hc_add_series(data = covid_ram2$Recuperados,
                 name = "Recuperados", color = "#a1d99b") %>% 
   hc_exporting(
     enabled = TRUE
   )
 ```
-
-### Suspeitos
-
-```{r}
-highchart() %>% 
-  hc_chart(type = "column") %>% 
-  hc_add_theme(hc_theme_smpl()) %>% 
-  hc_title(text = "Casos suspeitos de COVID-19 na Regi??o Aut??noma da Madeira") %>% 
-  hc_subtitle(text = "Fonte: IASA??DE & Autores") %>% 
-  hc_xAxis(categories = format(covid_pt$Data, "%b %d")) %>% 
-  hc_yAxis(title = list(text = "Casos suspeitos (cumulativo)")) %>% 
-  hc_add_series(data = covid_pt$Suspeitos,
-                name = "Suspeitos", color = "#fd8d3c") %>% 
-  hc_exporting(
-    enabled = TRUE
-  )
-```
-
-
-
 
