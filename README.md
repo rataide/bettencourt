@@ -1,5 +1,5 @@
 # Projecto COVID-19 Região Autónoma da Madeira (RAM)
-Projecto colaborativo e independente de monitorização do COVID-19 na Região Autónoma da Madeira (RAM), inspirado no projecto original de monitorização do COVID-19 em Portugal da ANMSP, disponível em https://www.anmsp.pt/covid19, e baseado no seu repositório original disponível em https://github.com/aperaltasantos/covid_pt.   
+Projecto colaborativo e independente de monitorização do COVID-19 na Região Autónoma da Madeira (RAM), inspirado no projecto original de monitorização do COVID-19 em Portugal da [ANMSP] (https://www.anmsp.pt/covid19) e baseado no seu [repositório] (https://github.com/aperaltasantos/covid_pt).   
 
 # Dashboard COVID-19
 - [Região Autónoma da Madeira] (https://jpmvieira.github.io/covid_ram/)
