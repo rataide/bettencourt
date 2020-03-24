@@ -10,7 +10,7 @@ Projecto colaborativo e independente de monitorização do COVID-19 na Região A
 
 ## Adaptação à Região Autónoma da Madeira
 - João Pedro Vieira
-- João Martins
+- João Vieira Martins
 - Sara Cerdas
 
 ## Autores do projecto original
