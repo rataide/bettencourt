@@ -30,7 +30,7 @@ Projecto colaborativo e independente de monitorização do COVID-19 na Região A
 - Twitter/Facebook: @jpmvieira
 
 ### COVID-19PT
-- Email: andre.peralta.santos@gmail.com)
+- Email: andre.peralta.santos@gmail.com
 - Twitter DM: @andre_peralta
 
 ## Termos de uso:
