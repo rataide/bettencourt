@@ -1,7 +1,7 @@
-# Datasets of the COVID19 in Portugal 
+# Datasets of the COVID19 in Região Autónoma da Madeira (RAM)
 
 ## Sources 
-We only use official Government sources to generate these datasets. Specifically, we use data from the [Directore-General of Health](www.dgs.pt) reports.
+We only use official Government sources to generate these datasets. Specifically, we use data from the [IASAÚDE](www.covidmadeira.pt) reports.
 
 ## Variables
 - lab_tested: Cumulative suspected cases that had a COVID19 lab test
@@ -16,4 +16,5 @@ We only use official Government sources to generate these datasets. Specifically
 - death_new: New (last 24h) deaths with a COVID19 diagnosis
 
 ## Contact
-aperalta@uw.edu 
+jpmvieira@gmail.com
+aperalta@uw.edu
