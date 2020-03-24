@@ -25,11 +25,11 @@ Projecto colaborativo e independente de monitorização do COVID-19 na Região A
 - Guilherme Pires
 
 ## Contactos
-## COVID-19RAM
+### COVID-19RAM
 - Email: jpmvieira@gmail.com
 - Twitter/Facebook: @jpmvieira
 
-## COVID-19PT
+### COVID-19PT
 - Email: andre.peralta.santos@gmail.com)
 - Twitter DM: @andre_peralta
 
