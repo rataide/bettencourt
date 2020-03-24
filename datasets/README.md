@@ -1,4 +1,4 @@
-# Datasets of the COVID19 in Região Autónoma da Madeira (RAM)
+# Datasets of the COVID19 in Região Autónoma da Madeira
 
 ## Sources 
 We only use official Government sources to generate these datasets. Specifically, we use data from the [IASAÚDE](www.covidmadeira.pt) reports.
