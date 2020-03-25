@@ -4,7 +4,7 @@ name: update-site
    repository_dispatch:
      types: test-me
    schedule:
-   - cron:  '2 20 * * *'
+   - cron:  '5 20 * * *'
 
  jobs:
    build:
