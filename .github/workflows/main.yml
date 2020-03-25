@@ -12,12 +12,6 @@ name: update-site
      container: wkusnierczyk/rmarkdown:latest
      steps:
      - uses: actions/checkout@master
-     - uses: r-lib/actions/setup-r@v1
-       with:
-         r-version: '3.5.3' # The R version to download (if necessary) and use.
-     - uses: r-lib/actions/setup-pandoc@v1
-   - name: install-rmarkdown
-       run: Rscript -e 'install.packages("rmarkdown")'
      - name: install-flexdashboard
        run: Rscript -e 'install.packages("flexdashboard")'
      - name: install-lubridate
