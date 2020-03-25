@@ -470,7 +470,7 @@ highchart() %>%
 ```
 
 
-### Genero
+### Sexo
 ```{r}
 
 covid_ram2<- covid_ram%>%
@@ -481,7 +481,7 @@ covid_ram2<- covid_ram%>%
 highchart() %>% 
   hc_chart(type = "column") %>% 
   hc_add_theme(hc_theme_smpl()) %>% 
-  hc_title(text = "Genero dos Casos Confirmados de COVID-19 na Regiao Autonoma da Madeira") %>% 
+  hc_title(text = "Sexo dos Casos Confirmados de COVID-19 na Regiao Autonoma da Madeira") %>% 
   hc_subtitle(text = "Fonte: IASAUDE") %>% 
   hc_xAxis(categories = format(covid_ram2$Data, "%b %d")) %>% 
   hc_yAxis(title = list(text = "Casos Confirmados (cumulativo)")) %>% 
