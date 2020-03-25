@@ -5,8 +5,7 @@ on:
      types: test-me
    schedule:
    - cron:  '0 8 * * *'
-
- jobs:
+jobs:
    build:
      runs-on: ubuntu-latest
      steps:
