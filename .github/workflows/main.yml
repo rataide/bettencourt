@@ -11,6 +11,7 @@ name: update-site
      runs-on: ubuntu-latest
      container: colobas/covid19-rmarkdown:latest
      steps:
+     - uses: actions/checkout@master
      - name: run-script
        run: |
          Rscript -e "rmarkdown::render('dashboard.Rmd')"
