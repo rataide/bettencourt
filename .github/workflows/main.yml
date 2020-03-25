@@ -1,32 +1,27 @@
 name: update-site
 
 on:
-   repository_dispatch:
-     types: test-me
-   schedule:
-   - cron:  '51 20 * * *'
+  repository_dispatch:
+    types: test-me
+  schedule:
+  - cron:  '52 20 * * *'
+
 jobs:
-   build:
-     runs-on: ubuntu-latest
-     steps:
-     - uses: actions/checkout@master
-     - uses: r-lib/actions/setup-r@v1
-       with:
-         r-version: '3.5.3' # The R version to download (if necessary) and use.
-     - uses: r-lib/actions/setup-pandoc@v1
-     - name: Install rmarkdown
-       run: |
-         Rscript -e 'install.packages("rmarkdown")'
-     - name: run-script
-       run: |
-         Rscript -e "rmarkdown::render('dashboard.Rmd')"
-         mv index.html docs
-     - name: commit-changes
-       run: |
-         git config --local user.email "action@github.com"
-         git config --local user.name "Automated update"
-         git commit -m "Automated update" -a
-     - name: Push changes
-       uses: ad-m/github-push-action@master
-       with:
-         github_token: ${{ secrets.covid19 }}
+  build:
+    runs-on: ubuntu-latest
+    container: colobas/covid19-rmarkdown:latest
+    steps:
+    - uses: actions/checkout@master
+    - name: run-script
+      run: |
+        Rscript -e "rmarkdown::render('dashboard.Rmd')"
+        mv dashboard.html docs/index.html
+    - name: commit-changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "Automated update"
+        git commit -m "Automated update" -a
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.covid19 }}
