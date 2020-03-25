@@ -1,0 +1,495 @@
+---
+title: "COVID-19PT_RAM | `r format(Sys.time(),'%d %b %y-%H:%m')`"
+knit: (function(input_file, encoding) {
+  out_dir <- 'docs';
+  rmarkdown::render(input_file,
+ encoding=encoding,
+ output_file=file.path(dirname(input_file), out_dir, 'index.html'))})
+output: 
+  flexdashboard::flex_dashboard:
+    theme: lumen
+    orientation: rows
+#    vertical_layout: scroll
+    social: [ "twitter", "facebook", "menu" ]
+    navbar:
+      - { title: "About", href: "https://github.com/jpmvieira/covid_ram" }
+---
+
+<style>                     
+.navbar {
+  background-color:"#fdbe85";
+  border-color:grey;
+}
+.navbar-brand {
+color:black!important;
+}
+</style>  
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+```
+
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  echo = FALSE,
+  eval = TRUE
+  )
+set.seed(1) # Set the seed is important for getting reproducible reports 
+## Clean the envorment 
+rm(list=ls())
+options(scipen=4)
+```
+
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+#library(tidyverse)
+library(EpiEstim)
+library(tidyr)
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(forcats)
+library(lubridate)
+library(googlesheets)
+require(RCurl)
+library(viridis)
+library(flexdashboard)
+#library(epuRate)
+library(here)
+library(rjson)
+library(jsonlite)
+library(RCurl)
+library(highcharter)
+library(here)
+#library(taskscheduleR)
+#library(cronR)
+#install.packages('miniUI')
+#install.packages('shiny')
+#install.packages("taskscheduleR")
+```
+
+```{r}
+u <- "https://docs.google.com/spreadsheets/d/e/2PACX-1vQs2aojKV0wRj5uEZ6MvCjRg9_yvAB5uMq8CswexdIt0DjIyka5qSHqXie5n--COLtAIiRsPzTVjEll/pub?output=csv"
+tc <- getURL(u, ssl.verifypeer=FALSE)
+covid_ram <- read.csv(textConnection(tc))
+```
+
+```{r}
+covid_ram$Data <- as.Date(covid_ram$Data,
+                         "%d-%m-%Y"
+                         )
+covid_ram<-covid_ram  %>%
+  mutate(week = week(Data)
+  )
+             
+covid_ram <- mutate(covid_ram, 
+                   Suspeitos_lag = lag(x = Suspeitos, 
+                                        n = 1, 
+                                        order_by = Data),
+                   Suspeitos_var=Suspeitos-Suspeitos_lag,
+                   Suspeitos_sign=if_else(Suspeitos_var>=0,"+","-"),
+                   
+                   Negativos_lag = lag(x = Negativos, 
+                                        n = 1, 
+                                        order_by = Data),
+                   Negativos_var=Negativos-Negativos_lag,
+                   Negativos_sign=if_else(Negativos_var>=0,"+","-"),                                      
+                   Confirmados_lag = lag(x = Confirmados, 
+                                        n = 1, 
+                                        order_by = Data),
+                   Confirmados_var=Confirmados-Confirmados_lag,
+                   Confirmados_sign=if_else(Confirmados_var>=0,"+","-"),
+                                     
+                   Recuperados_lag1 = lag(x = Recuperados, 
+                                        n = 1, 
+                                        order_by = Data),
+                   Recuperados_var=Recuperados-Recuperados_lag1,
+                   Recuperados_sign=if_else(Recuperados_var>=0,"+","-"),
+
+                   Mortes_lag1 = lag(x = Mortes, 
+                                     n = 1, 
+                                     order_by = Data),
+                   Mortes_var=Mortes-Mortes_lag1,
+                   Mortes_sign=if_else(Mortes_var>=0,"+","-"),
+                   
+                   AS_lag1 = lag(x = AS, 
+                                        n = 1, 
+                                        order_by = Data),
+                   AS_var=AS-AS_lag1,
+                   AS_sign=if_else(AS_var>=0,"+","-"),
+                   
+                   Internados_lag1 = lag(x = Internados, 
+                                        n = 1, 
+                                        order_by = Data),
+                   Internados_var=Internados-Internados_lag1,
+                   Internados_sign=if_else(Internados_var>=0,"+","-"),
+                   
+                    Intensivos_lag1 = lag(x = Intensivos, 
+                                        n = 1, 
+                                        order_by = Data),
+                   Intensivos_var=Intensivos-Intensivos_lag1,
+                   Intensivos_sign=if_else(Intensivos_var>=0,"+","-"),
+                   
+                   Domicilio_lag1 = lag(x = Domicilio, 
+                                        n = 1, 
+                                        order_by = Data),
+                   Domicilio_var=Domicilio-Domicilio_lag1,
+                   Domicilio_sign=if_else(Domicilio_var>=0,"+","-"),                                      
+                   Hotel_lag1 = lag(x = Hotel, 
+                                        n = 1, 
+                                        order_by = Data),
+                   Hotel_var=Hotel-Hotel_lag1,
+                   Hotel_sign=if_else(Hotel_var>=0,"+","-"), 
+                   
+                   Importados_lag1 = lag(x = Importados, 
+                                        n = 1, 
+                                        order_by = Data),
+                   Importados_var=Importados-Importados_lag1,
+                   Importados_sign=if_else(Importados_var>=0,"+","-"), 
+                   
+                   Contactos_lag1 = lag(x = Contactos, 
+                                        n = 1, 
+                                        order_by = Data),
+                   Contactos_var=Contactos-Contactos_lag1,
+                   Contactos_sign=if_else(Contactos_var>=0,"+","-"), 
+                   
+                   Comunitarios_lag1 = lag(x = Comunitarios, 
+                                        n = 1, 
+                                        order_by = Data),
+                   Comunitarios_var=Comunitarios-Comunitarios_lag1,
+                   Comunitarios_sign=if_else(Comunitarios_var>=0,"+","-"),
+                   
+                   Masculino_lag1 = lag(x = Masculino, 
+                                        n = 1, 
+                                        order_by = Data),
+                   Masculino_var=Masculino-Masculino_lag1,
+                   Masculino_sign=if_else(Masculino_var>=0,"+","-"),
+                   
+                   Feminino_lag1 = lag(x = Feminino, 
+                                        n = 1, 
+                                        order_by = Data),
+                   Feminino_var=Feminino-Feminino_lag1,
+                   Feminino_sign=if_else(Feminino_var>=0,"+","-")             
+                   ) 
+```
+
+```{r}
+covid_ram_english <- covid_ram %>%
+  select(
+    Data,
+    Suspeitos,
+    Suspeitos_var,
+    Negativos,
+    Negativos_var,
+    Confirmados,
+    Confirmados_var,
+    Recuperados,
+    Recuperados_var,
+    Mortes,
+    Mortes_var,
+    AS,
+    AS_var,
+    Internados,
+    Internados_var,
+    Intensivos,
+    Intensivos_var,
+    Domicilio,
+    Domicilio_var,
+    Hotel,
+    Hotel_var,
+    Importados,
+    Importados_var,
+    Contactos,
+    Contactos_var,
+    Comunitarios,
+    Comunitarios_var,
+    Masculino,
+    Masculino_var,
+    Feminino,
+    Feminino_var
+  ) %>%
+  rename(
+    date="Data",
+    lab_tested="Suspeitos",
+    lab_tested_new="Suspeitos_var",
+    negatives="Negativos",
+    negatives_new="Negativos_var",
+    confirmed="Confirmados",
+    confirmed_new="Confirmados_var",
+    recovered="Recuperados",
+    recovered_new="Recuperados_var",
+    death="Mortes",
+    death_new="Mortes_var",
+    contact_tracing="AS",
+    contact_tracing_new="AS_var",
+    inpatient="Internados",
+    inpatient_new="Internados_var",
+    ICU="Intensivos",
+    ICU_new="Intensivos_var",
+    homecare="Domicilio",
+    homecare_new="Domicilio_var",
+    hotelcare="Hotel",
+    hotelcare_new="Hotel_var",
+    imported="Importados",
+    imported_new="Importados_var",
+    contact="Contactos",
+    contact_new="Contactos_var",
+    communitaries="Comunitarios",
+    communitaries_new="Comunitarios_var",
+    male="Masculino",
+    male_new="Masculino_var",
+    female="Feminino",
+    female_new="Feminino_var"
+  ) 
+write_csv(
+  covid_ram_english,
+  here::here(
+    "datasets", 
+     paste(
+       format(Sys.time(), "%d_%b_%Y"),
+       "covid_prt_ram.csv")
+  )
+)
+          
+```
+
+
+```{r}
+covid_ram_l <- covid_ram %>%
+  pivot_longer(
+   cols = "Suspeitos":"AS",
+   names_to = "tipo",
+   values_to = "value",
+   values_drop_na = TRUE
+ ) 
+covid_ram_last<-covid_ram %>% 
+  filter(Data==last(Data))
+```
+
+Baseado em [COVID19-PT](https://aperaltasantos.github.io/covid_pt/)
+=====================================  
+
+Row
+-----------------------------------------------------------------------
+
+### Vigilancia
+```{r}
+x1 <- covid_ram_last$AS
+x2<- covid_ram_last$AS_sign
+x3<- abs(covid_ram_last$AS_var)
+valueBox(paste(x1,"(",x2,x3,")"), 
+         icon = "fa-binoculars",
+         color="#bdbdbd")
+```
+
+### Suspeitos
+```{r}
+x1 <- covid_ram_last$Suspeitos
+x2<- covid_ram_last$Suspeitos_sign
+x3<- abs(covid_ram_last$Suspeitos_var)
+valueBox(paste(x1,"(",x2,x3,")"), 
+         icon = "fa-exclamation-triangle",
+         color="#fdd49e")
+```
+
+### Negativos
+```{r}
+x1 <- covid_ram_last$Negativos
+x2<- covid_ram_last$Negativos_sign
+x3<- abs(covid_ram_last$Negativos_var)
+valueBox(paste(x1,"(",x2,x3,")"), 
+         icon = "fa-minus-circle",
+         color="#ff6666")
+```
+
+### Confirmados
+```{r}
+x1 <- covid_ram_last$Confirmados
+x2<- covid_ram_last$Confirmados_sign
+x3<- abs(covid_ram_last$Confirmados_var)
+valueBox(paste(x1,"(",x2,x3,")"), 
+         icon = "fa-file-medical",
+         color="#fdbb84")
+```
+
+Row
+-----------------------------------------------------------------------
+
+### Internados
+```{r}
+x1 <- covid_ram_last$Internados
+x2<- covid_ram_last$Internados_sign
+x3<- abs(covid_ram_last$Internados_var)
+valueBox(paste(x1,"(",x2,x3,")"), 
+         icon = "fa-hospital",
+         color="#fc8d59")
+```
+
+### Intensivos
+```{r}
+x1 <- covid_ram_last$Intensivos
+x2<- covid_ram_last$Intensivos_sign
+x3<- abs(covid_ram_last$Intensivos_var)
+valueBox(paste(x1,"(",x2,x3,")"), 
+         icon = "fas fa-procedures",
+         color="#ef6548")
+```
+
+### Domicilio
+```{r}
+x1 <- covid_ram_last$Domicilio
+x2<- covid_ram_last$Domicilio_sign
+x3<- abs(covid_ram_last$Domicilio_var)
+valueBox(paste(x1,"(",x2,x3,")"), 
+         icon = "fas fa-home",
+         color="#b3d9ff")
+```
+
+### Hotel
+```{r}
+x1 <- covid_ram_last$Hotel
+x2<- covid_ram_last$Hotel_sign
+x3<- abs(covid_ram_last$Hotel_var)
+valueBox(paste(x1,"(",x2,x3,")"), 
+         icon = "fas fa-h-square",
+         color="#b3f0ff")
+```
+
+### Recuperados
+```{r}
+x1 <- covid_ram_last$Recuperados
+x2<- covid_ram_last$Recuperados_sign
+x3<- abs(covid_ram_last$Recuperados_var)
+valueBox(paste(x1,"(",x2,x3,")"), 
+         icon = "fas fa-walking",
+         color="#a1d99b")
+```
+
+Row {.tabset .tabset-fade}
+-----------------------------------------------------------------------
+
+```{r}
+covid_ram1<- covid_ram %>%
+  filter(
+    Data>as.Date("2020-03-01")
+  )
+```
+
+### Suspeitos
+
+```{r}
+highchart() %>% 
+  hc_chart(type = "column") %>% 
+  hc_add_theme(hc_theme_smpl()) %>% 
+  hc_title(text = "Casos suspeitos de COVID-19 na Regiao Autonoma da Madeira") %>% 
+  hc_subtitle(text = "Fonte: IASAUDE") %>% 
+  hc_xAxis(categories = format(covid_ram$Data, "%b %d")) %>% 
+  hc_yAxis(title = list(text = "Casos suspeitos (cumulativo)")) %>% 
+  hc_add_series(data = covid_ram$Suspeitos,
+                name = "Suspeitos", color = "#fdd49e") %>% 
+  hc_exporting(
+    enabled = TRUE
+  )
+```
+
+### Confirmados  
+
+```{r}
+
+covid_ram2<- covid_ram%>%
+  filter(
+    Data>as.Date("2020-03-10")
+  )
+
+highchart() %>% 
+  hc_chart(type = "column") %>% 
+  hc_add_theme(hc_theme_smpl()) %>% 
+  hc_title(text = "Casos confirmados de COVID-19 na Regiao Autonoma da Madeira") %>% 
+  hc_subtitle(text = "Fonte: IASAUDE") %>% 
+  hc_xAxis(categories = format(covid_ram2$Data, "%b %d")) %>% 
+  hc_yAxis(title = list(text = "Casos confirmados (cumulativo)")) %>% 
+  hc_add_series(data = covid_ram2$Confirmados,
+                name = "Confirmados", color = "#fdbb84") %>% 
+  hc_exporting(
+    enabled = TRUE
+  )
+```
+
+### Novos casos  
+
+```{r}
+
+covid_ram2<- covid_ram%>%
+  filter(
+    Data>as.Date("2020-03-10")
+  )
+
+highchart() %>% 
+  hc_chart(type = "column" , color = "#e6550d") %>% 
+  hc_add_theme(hc_theme_smpl()) %>% 
+  hc_title(text = "Curva epidemica de COVID-19 na Regiao Autonoma da Madeira") %>% 
+  hc_subtitle(text = "Fonte: IASAUDE") %>% 
+  hc_xAxis(categories = format(covid_ram2$Data, "%b %d")) %>% 
+  hc_yAxis(title = list(text = "Novos casos confirmados")) %>% 
+  hc_add_series(data = covid_ram2$Confirmados_var,
+                name = "Novos casos", color = "#ff6666") %>% 
+  hc_exporting(
+    enabled = TRUE
+  )
+```
+
+### Origem
+
+```{r}
+
+   covid_ram2<- covid_ram%>%
+  filter(
+        Data==last(Data)
+  )
+   
+highchart() %>% 
+  hc_chart(type = "column") %>% 
+  hc_add_theme(hc_theme_smpl()) %>% 
+  hc_title(text = "Origem dos Casos Confirmados de COVID-19 na Regiao Autonoma da Madeira") %>% 
+  hc_subtitle(text = "Fonte: IASAUDE") %>% 
+  hc_xAxis(categories = format(covid_ram2$Data, "%b %d")) %>% 
+  hc_yAxis(title = list(text = "Casos Confirmados (cumulativo)")) %>% 
+  hc_add_series(data = covid_ram2$Importados,
+                name = "Importados", color = "#ccb3ff") %>% 
+  hc_add_series(data = covid_ram2$Contactos,
+                name = "Contactos Confirmados", color = "#ffffb3") %>% 
+  hc_exporting(
+    enabled = TRUE
+  )
+```
+
+
+### Genero
+```{r}
+
+covid_ram2<- covid_ram%>%
+  filter(
+    Data==last(Data)
+  )
+
+highchart() %>% 
+  hc_chart(type = "column") %>% 
+  hc_add_theme(hc_theme_smpl()) %>% 
+  hc_title(text = "Genero dos Casos Confirmados de COVID-19 na Regiao Autonoma da Madeira") %>% 
+  hc_subtitle(text = "Fonte: IASAUDE") %>% 
+  hc_xAxis(categories = format(covid_ram2$Data, "%b %d")) %>% 
+  hc_yAxis(title = list(text = "Casos Confirmados (cumulativo)")) %>% 
+  hc_add_series(data = covid_ram2$Masculino,
+                name = "Masculino", color = "#cceeff") %>% 
+  hc_add_series(data = covid_ram2$Feminino,
+                name = "Feminino", color = "#ffccff") %>% 
+  hc_exporting(
+    enabled = TRUE
+  )
+```
