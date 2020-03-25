@@ -19,8 +19,6 @@ name: update-site
        run: Rscript -e 'install.packages("rmarkdown")'
      - name: install-flexdashboard
        run: Rscript -e 'install.packages("flexdashboard")'
-     - name: install-tidyverse
-       run: Rscript -e 'install.packages("tidyverse")'
      - name: install-lubridate
        run: Rscript -e 'install.packages("lubridate")'
      - name: install-googlesheets
